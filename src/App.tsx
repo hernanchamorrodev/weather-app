@@ -1,10 +1,12 @@
 import React from 'react';
+import {Layout} from './layouts/Layout';
+import Index from './pages/Index';
 
 function App() {
   return (
-    <main className="flex justify-center items-center bg-gradient-to-br from-slate-100 via-sky-300 to-sky-400 h-[100vh] w-full">
-      Weather app
-    </main>
+    <Layout>
+      <Index />
+      </Layout>
   );
 }
 
