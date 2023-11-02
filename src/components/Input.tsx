@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { optionType } from "../types";
-// API KEY FROM ENV
-const API_KEY = process.env.API_KEY_OPENWEATHER;
+
+const API_KEY = process.env.REACT_APP_API_KEY_OPENWEATHER;
 
 interface InputProps {
   type: string;
@@ -11,31 +11,36 @@ interface InputProps {
 
 const Input: React.FC<InputProps> = ({ type, placeholder }) => {
   const [value, setValue] = useState<string>("");
-  const [options, setOptions] = useState<[]>([]);
+  const [options, setOptions] = useState<optionType[]>([]);
 
-  const getWeather = async (value: string) => {
-    const response = await fetch(
-      `http://api.openweathermap.org/geo/1.0/direct?q=${value}&limit=5&appid=${API_KEY}`
-    );
-    const data = await response.json();
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (value === "") return setOptions([]);
 
-    setOptions(data);
+      getWeather(value);
+    }, 2000);
 
-    return data;
+    return () => clearTimeout(delayDebounceFn);
+  }, [value]);
+
+  const getWeather = (value: string) => {
+    fetch(
+      `http://api.openweathermap.org/data/2.5/weather?q=${value.trim()}&appid=${API_KEY}`
+    )
+      .then((response) => response.json())
+      .then((data) => setOptions([data]))
+      .catch((error) => console.log(error));
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.trim();
-    // event.target.value.trim()
+    const valor = event.target.value;
 
-    setValue(value);
-
-    getWeather(value).then((data) => {
-      console.log(data);
-    });
+    setValue(valor);
   };
 
-  const onOptionSelect = (option: optionType) => {};
+  const onOptionSelect = (option: optionType) => {
+    console.log(option);
+  };
 
   return (
     <>
