@@ -1,12 +1,12 @@
-import React from 'react';
-import {Layout} from './layouts/Layout';
-import Index from './pages/Index';
+import React from "react";
+import { Layout } from "./layouts/Layout";
+import Index from "./pages/Index";
 
-function App() {
+function App(): JSX.Element {
   return (
     <Layout>
       <Index />
-      </Layout>
+    </Layout>
   );
 }
 
